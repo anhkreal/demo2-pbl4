@@ -1,0 +1,91 @@
+{% extends "base.htm" %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Chào mừng đến web camera live feed</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="../static/app/css/all.min.css" rel="stylesheet">
+    <link href="../static/app/css/owl.carousel.min.css" rel="stylesheet">
+    <link href="../static/app/css/style.css" rel="stylesheet">
+    <!-- JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
+    <script src="../static/app/js/all.min.js"></script>
+    <script src="../static/app/js/owl.carousel.min.js"></script>
+    <script src="../static/app/js/myscript.js"></script>
+</head>
+<body>
+    {% block new-camera %}
+    <div class="container mt-5">
+    <div class="col-md-8 mx-auto"> <!-- Thay đổi độ rộng container -->
+        <h1 class="mb-4">Thêm mới camera</h1>
+        <form method="POST" action="{% url 'new-camera' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Tên camera:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="ip_address">Địa chỉ IP:</label>
+                <input type="text" class="form-control" id="ip_address" name="ip_address" required placeholder="Ví dụ: 192.168.1.123">
+            </div>
+
+            <div class="form-group">
+                <label for="port">Cổng:</label>
+                <input type="number" class="form-control" id="port" name="port" value = "554" required>
+            </div>
+
+            <div class="form-group">
+                <label for="protocol">Giao thức:</label>
+                <select class="form-control" id="protocol" name="protocol" onchange="updatePort();">
+                    <option value="rtsp" selected>RTSP</option>
+                    <option value="http">HTTP</option>
+                    <option value="https">HTTPS</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="username">Tên tài khoản thiết bị:</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Ví dụ: admin">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mật khẩu thiết bị:</label>
+                <input type="password" class="form-control" id="password" name="password"> 
+            </div>
+
+            <div class="form-group">
+                <label for="stream_name">Tên stream:</label>
+                <input type="text" class="form-control" id="stream_name" name="stream_name" placeholder="Ví dụ: stream1">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Thêm mới</button>
+        </form>
+    </div>
+    </div>
+    <script>
+        function updatePort() {
+            const protocol = document.getElementById('protocol').value;
+            const portInput = document.getElementById('port');
+            
+            // Đặt cổng tương ứng với giao thức
+            if (protocol === 'rtsp') {
+                portInput.value = '554'; // Cổng mặc định cho RTSP
+            } else if (protocol === 'http') {
+                portInput.value = '80'; // Cổng mặc định cho HTTP
+            } else if (protocol === 'https') {
+                portInput.value = '443'; // Cổng mặc định cho HTTPS
+            }
+        }
+    </script>
+    {% endblock new-camera %}
+</body>
+</html>
